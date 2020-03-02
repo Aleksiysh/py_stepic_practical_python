@@ -1,0 +1,13 @@
+rez = []
+while True:
+    str = input()
+    if str == '.':
+        break
+    rez.append(int(str))
+for j in range(3):
+    i_max = j
+    for i in range(j, len(rez)):
+        if rez[i] > rez[i_max]:
+            i_max = i
+    rez.insert(j, rez.pop(i_max))
+print(rez)
