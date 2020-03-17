@@ -46,7 +46,8 @@ def add_new_objects():
     for obj in new_objects:
         if is_passble(obj[2]):
             position = obj[2]  # if len(obj)==3 else (None, None)
-            key = (obj[0], get_next_counter_value())
+            key = (obj[0], get_next_counter_value()
+                   ) if obj[0] != 'player' else (obj[0],)
             game_objects[key] = obj[1]
             game_objects[key].update({'position': position})
         objs = get_objects_by_coords(obj[2])
@@ -93,39 +94,53 @@ def create_object(type, position, **kwargs):
 
 def load_level(level):
     i = j = 0
-    for line in level.strip().split('\n'):
+    level.strip()
+    game_objects.clear()
+    lines = level.splitlines()
+    if '' in lines:
+        lines.remove('')
+    for line in lines:
         for j in range(len(line.strip())):
-            z = line[j]
-
+            if line[j] != ' ':
+                new_objects.append(create_object(
+                    search_type(line[j]), (i, j)))
         i += 1
-
+    add_new_objects()
+    new_objects.clear()
     pass
 
 
-game_objects = {
-    ('wall', 0): {'position': (0, 0), 'passable': False, 'interactable': False, 'char': '#'},
-    ('wall', 1): {'position': (0, 1), 'passable': False, 'interactable': False, 'char': '#'},
-    ('player',): {'position': (1, 1), 'passable': True, 'interactable': True, 'char': '@', 'coins': 0},
-    ('soft_wall', 11): {'position': (1, 4), 'passable': False, 'interactable': True, 'char': '%'},
-    ('coin', 2): {'position': (1, 2), 'passable': True, 'interactable': True, 'char': '$'}
-}
+def search_type(simbol):
+    for type in obj_types_to_char:
+        if obj_types_to_char[type] == simbol:
+            return type
 
+
+# game_objects = {
+#     ('wall', 0): {'position': (0, 0), 'passable': False, 'interactable': False, 'char': '#'},
+#     ('wall', 1): {'position': (0, 1), 'passable': False, 'interactable': False, 'char': '#'},
+#     ('player',): {'position': (1, 1), 'passable': True, 'interactable': True, 'char': '@', 'coins': 0},
+#     ('soft_wall', 11): {'position': (1, 4), 'passable': False, 'interactable': True, 'char': '%'},
+#     ('coin', 2): {'position': (1, 2), 'passable': True, 'interactable': True, 'char': '$'}
+# }
 obj_types_to_char = {
     "player": "@", "wall": '#', 'soft_wall': '%', 'heatwave': '+', "bomb": '*', "coin": '$'
 }
 
-
+game_objects = {}
 old_objects = []
 movements = []
 interactions = []
 new_objects = []
 
 
-new_objects = [
-    ('bomb', {'passable': True, 'interactable': True, 'lifetime': 5}, (1, 1)),
-    ('bomb', {'passable': True, 'interactable': True, 'lifetime': 5}, (2, 2))
-]
-add_new_objects()
-print(get_objects_by_coords((1, 1)))
-# assert get_objects_by_coords((1, 1)) == [('player', ), ('bomb', 0)]
+level_example = """
+#
+#
+#
+"""
+
+load_level(level_example)
+# assert get_objects_by_coords((0, 0)) == [('wall', 0)]
+print(get_objects_by_coords((0, 0)))
 pass
