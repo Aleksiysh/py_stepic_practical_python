@@ -6,7 +6,7 @@ def foo(a, line):
            '*': lambda a, b: a * b,
            '/': lambda a, b: a / b
            }
-    return ops[line[0]](a, int(line[1]))
+    return ops[line[0]](a, float(line[1]))
 
 
 def main():
