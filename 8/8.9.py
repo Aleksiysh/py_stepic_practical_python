@@ -127,21 +127,10 @@ interactions = []
 new_objects = []
 
 
-level_example = """
-##########
-#@  %    #
-#   %    #
-#  %%%   #
-# %%$%%  #
-#  %%%   #
-#   %    #
-#   %    #
-#   %    #
-##########
-"""
+level_example ='''
+'''
 
 load_level(level_example)
-# assert get_objects_by_coords((0, 0)) == [('wall', 0)]
 print(get_objects_by_coords((0, 0)))
 pass
 
