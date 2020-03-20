@@ -116,9 +116,64 @@ def search_type(simbol):
             return type
 
 
+def idle_logic(_):
+    pass
+
+
+def bomb_logic(bomb_object):
+    if game_objects[bomb_object]['life_time'] == 0:
+        old_objects.append(bomb_object)
+        x = game_objects[bomb_object]['position'][0]
+        y = game_objects[bomb_object]['position'][1]
+        for i in (-1, 1):
+            new_objects.append(
+                ('heatwave', {'passable': True, 'interactable': True}, (x + i, y)))
+            new_objects.append(
+                ('heatwave', {'passable': True, 'interactable': True}, (x, y+i)))
+        new_objects.append(
+            ('heatwave', {'passable': True, 'interactable': True}, (x, y)))
+    else:
+        game_objects[bomb_object]['life_time'] -= 1
+    pass
+
+
+def heatwave_logic(heatwave):
+    old_objects.append(heatwave)
+
+
+object_logics = {
+    'bomb': bomb_logic,
+    'heatwave': heatwave_logic
+}
+
+
+def process_objects_logic():
+    for game_object in game_objects:
+        object_logics.get(game_object[0], idle_logic)(game_object)
+
+
 obj_types_to_char = {
     "player": "@", "wall": '#', 'soft_wall': '%', 'heatwave': '+', "bomb": '*', "coin": '$'
 }
+
+
+def check_game_state():
+    lose = True
+    win = True
+
+    for obj in game_objects:
+        if obj[0] == 'player':
+            lose = False
+        if obj[0] == 'coin':
+            win = False
+        pass
+
+    if lose:
+        return 'lose'
+    elif win:
+        return 'win'
+    return 'in_progress'
+
 
 game_objects = {}
 old_objects = []
@@ -126,12 +181,19 @@ movements = []
 interactions = []
 new_objects = []
 
-
-level_example ='''
-'''
+level_example = """
+##########
+#@  %    #
+#   %    #
+#  %%%   #
+# %%$%%  #
+#  %%%   #
+#   %*   #
+#   %    #
+#   %    #
+##########
+"""
 
 load_level(level_example)
-print(get_objects_by_coords((0, 0)))
+a = check_game_state()
 pass
-
-
