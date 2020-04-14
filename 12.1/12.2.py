@@ -8,13 +8,21 @@ class Point:
 
 
 class Circle:
-    def __init__(self, parameter_list):
-        pass
+    def __init__(self, center, radius):
+        self.center = center
+        self.radius = radius
 
-    pass
+    def square(self):
+        return 3.14 * self.radius ** 2
 
-p1 = Point(1.5, 1)
-p2 = Point(1.5, 2)
-print(p1.dist(p2) == 1)
+    def do_intersect(self, other):
+        return ((self.center.x - other.center.x) ** 2 + (self.center.y - other.center.y) ** 2) ** 0.5 <= self.radius + other.radius
 
-pass
+
+circ = Circle(Point(0, 3), 4)
+circ.radius == 4
+circ.center.x == 0
+print(
+    Circle(Point(0, 0), 0).square() == 0,
+    circ.center.x
+)
