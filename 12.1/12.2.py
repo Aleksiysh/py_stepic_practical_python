@@ -16,13 +16,34 @@ class Circle:
         return 3.14 * self.radius ** 2
 
     def do_intersect(self, other):
-        return ((self.center.x - other.center.x) ** 2 + (self.center.y - other.center.y) ** 2) ** 0.5 <= self.radius + other.radius
+        return ((self.center.x - other.center.x) ** 2 + (self.center.y - other.center.y) ** 2
+                ) ** 0.5 <= self.radius + other.radius
+
+    def __gt__(self, other):
+        return self.square() > other.square()
+
+    def __ge__(self, other):
+        return self.square() >= other.square()
+
+    def __lt__(self, other):
+        return self.square() < other.square()
+
+    def __le__(self, other):
+        return self.square() <= other.square()
+
+    def __eq__(self, other):
+        return self.square() == other.square()
+
+    def __ne__(self, other):
+        return self.square() != other.square()
 
 
-circ = Circle(Point(0, 3), 4)
-circ.radius == 4
-circ.center.x == 0
+sm = Circle(Point(12, 12), 425)
+bg = Circle(Point(9, 1), 10293.4)
 print(
-    Circle(Point(0, 0), 0).square() == 0,
-    circ.center.x
+    sm > bg,
+    sm == sm,
+    sm != bg,
+    sm == bg
+
 )
